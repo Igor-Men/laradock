@@ -17,7 +17,6 @@ services:
             context: ./workspace
             args:
                 - INSTALL_XDEBUG=false
-                - INSTALL_SOAP=false
                 - INSTALL_MONGO=false
                 - INSTALL_NODE=false
                 - INSTALL_YARN=false
@@ -27,7 +26,6 @@ services:
                 - COMPOSER_GLOBAL_INSTALL=false
                 - INSTALL_WORKSPACE_SSH=false
                 - INSTALL_LARAVEL_ENVOY=false
-                - INSTALL_DEPLOYER=false
                 - INSTALL_LINUXBREW=false
                 - PUID=1000
                 - PGID=1000
@@ -105,7 +103,7 @@ services:
             - ./logs/apache2:/var/log/apache2
         ports:
             - "80:80"
-            - "443:443"
+            - "444:443"
         links:
             - php-fpm
 

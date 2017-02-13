@@ -47,23 +47,6 @@ ARG PGID=1000
 RUN groupadd -g $PGID laradock && \
     useradd -u $PUID -g laradock -m laradock
 
-
-#####################################
-# SOAP:
-#####################################
-USER root
-
-ARG INSTALL_SOAP=false
-ENV INSTALL_SOAP ${INSTALL_SOAP}
-
-RUN if [ ${INSTALL_SOAP} = true ]; then \
-  # Install the PHP SOAP extension
-  apt-get -y update && \
-  add-apt-repository -y ppa:ondrej/php && \
-  apt-get -y install libxml2-dev php7.0-soap && \
-  echo "extension=soap.so" >> /etc/php/7.0/cli/conf.d/40-soap.ini \
-;fi
-
 #####################################
 # Set Timezone
 #####################################
@@ -90,10 +73,6 @@ RUN if [ ${COMPOSER_GLOBAL_INSTALL} = true ]; then \
     # run the install
     composer global install \
 ;fi
-
-# Export composer vendor path
-RUN echo "" >> ~/.bashrc && \
-echo 'export PATH="~/.composer/vendor/bin:$PATH"' >> ~/.bashrc
 
 #####################################
 # Crontab
@@ -325,20 +304,9 @@ ENV INSTALL_LARAVEL_ENVOY ${INSTALL_LARAVEL_ENVOY}
 
 RUN if [ ${INSTALL_LARAVEL_ENVOY} = true ]; then \
     # Install the Laravel Envoy
-    composer global require "laravel/envoy=~1.0" \
-;fi
-
-#####################################
-# Deployer:
-#####################################
-USER laradock
-
-ARG INSTALL_DEPLOYER=false
-ENV INSTALL_DEPLOYER ${INSTALL_DEPLOYER}
-
-RUN if [ ${INSTALL_DEPLOYER} = true ]; then \
-    # Install the Deployer
-    composer global require "deployer/deployer" \
+    echo "" >> ~/.bashrc && \
+    echo 'export PATH="~/.composer/vendor/bin:$PATH"' >> ~/.bashrc \
+    && composer global require "laravel/envoy=~1.0" \
 ;fi
 
 #####################################
